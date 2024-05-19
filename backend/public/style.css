@@ -1,0 +1,36 @@
+body{
+    background-color: white;
+}
+
+
+/* Media query for nav min-width: 768px */
+@media only screen and (min-width: 768px){
+    #order_img{
+     width: 25% !important;
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

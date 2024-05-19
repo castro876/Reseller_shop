@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> Profile || Page 1</title>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+    <nav class="container fixed-top w-100" style="background-color : rgba(255, 255, 255, 1); box-shadow : 0px 25px 20px -14px rgba(0,0,0,0.11)">
+        <div class="d-inline-block"><a href="#" class="mx-2 text-decoration-none text-dark" style="font-size: 25px;"><span style="color : orangered" >W</span>eBBIE</a></div>
+      <ul class="text-center">
+        <a href="#"> <s class="text-danger">Home</s></a>
+        <a href="#" class="text-dark mx-1 text-decoration-none">Product</s></a>
+        <a href="#" class="text-dark mx-1 text-decoration-none">Policy</s></a>
+        <a href="#" class="text-dark mx-1 text-decoration-none"> <button class="btn btn-outline-success py-0">Logout</button></a>
+      </ul>
+     
+    </nav>
+    <div class="container-fluid border" style="margin-top: 100px;box-sizing: border-box;">
+        <h1 class="text-center text-danger">Welcome <span class="text-dark">| <% if( typeof(msg) !=="undefined") { %> 
+          <%= msg %>
+          <% } %>
+        </span></h1>
+        <table class="table">
+          <thead class="thead-dark">
+            <tr class="text-success" style="background-color: orangered">
+              <th scope="col">Order</th>
+              <th scope="col">Amount</th>
+             <th scope="col">Price</th>
+             <th scope="col">Order Date</th>
+             <th scope="col">Delivery date</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr>
+              <td scope="row">
+                <img src= "./images/home_pic.jpg" alt='' class="w-100 img-fluid" id="order_img"/>
+                <p class="fw-light text-warning">Richard milly watch</p>
+                </td>         
+              <td>0.00</td>
+              <td>0.00</td>
+              <td>0.00</td>
+              <td>May 13, 2024</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <% if( typeof(data) !=="undefined") { %>           
+        <h1 class="text-success"><%= msg %></h1>
+        <% } %>
+      
+</body>
+</html>

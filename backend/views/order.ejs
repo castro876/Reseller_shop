@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order || Page 1</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h4 class="text-center">Add Order | <span class="text-danger">Admin</span></h4>
+    <div class="w-75 m-auto">
+     <div class="row">
+        <div class="col-sm border text-center pt-2 pb-2" style="background: #fff; box-shadow : 0 0 20px 0px rgba(0, 0, 0, 0.1)">
+         <div class="w-100">
+        <img class="img-fluid w-100" id="img" src="choose.png" alt="product">
+    </div>
+    </div>
+
+    <div class="col-sm bg-danger"><br>
+        <div>
+            <form action="/add_order" method="post" class="text-center">
+                <input class="mb-2 form-control" type="text" name="title" placeholder="Title:">
+                <input class="mb-2 form-control" type="text" name="price" placeholder="Price:">
+                <input class="mb-2 form-control" type="text" name="quantity" placeholder="quantity:">
+                <input class="mb-2 form-control" type="text" name="merchant_id" placeholder="Merchant_id:">
+                <input class="mb-2 form-control" type="text" name="order_date" placeholder="Order_date:">
+                <input class="mb-2 form-control" type="text" name="delivery_date" placeholder="Delivery_date:">
+                <input class="mb-2 form-control bg-danger btn-danger" id="imgInput" name="image" accept="image/jpeg, image/jpg" type="file" onchange="updateFileName(this)">
+                <button type="submit" class="btn btn-dark">Add order</button>
+              </form>
+   </div>
+   </div>
+
+   </div>
+    </div>
+ <script>
+    let img = document.getElementById('img')
+    let input = document.getElementById('imgInput')
+
+    input.onchange = (e) => {
+        if (input.files[0]) {
+             img.src = URL.createObjectURL(input.files[0]);
+        }
+    }
+
+    function updateFileName(input) {
+    if (input.files.length > 0) {
+      // Get the file name from the file input element
+      var fileName = input.files[0].name;
+      // Update the value of the hidden input field with the file name
+      document.getElementById('fileName').value = fileName;
+    }
+  }
+ </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>
