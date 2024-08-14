@@ -287,7 +287,7 @@ const userForgetPost = async (req, res) => {
     usrExist.resetPasswordExpiry = resetTokenExpiry;
     await usrExist.save();
 
-    const resetLink = `http://localhost:4001/reset_password/${resetToken}`;
+    const resetLink = `https://reseller-shop-backend.onrender.com/reset_password/${resetToken}`;
 
     const transporter = nodemailer.createTransport({
       service: 'gmail',
