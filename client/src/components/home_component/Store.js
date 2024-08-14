@@ -59,7 +59,7 @@ const count = cartStorage.length
        <button className="navbar-toggler">
       <span className="navbar-toggler-icon" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"></span>
     </button>
-    <h1 className="text-danger position-absolute d-inline">W<span className="text-white">eBBIE</span></h1>
+    <h1 className="text-danger position-absolute d-inline">G<span className="text-white">aGAND</span></h1>
      </div>
      <Link to={'/shoppingcart'} class="btn btn-success" type="button"><i className="fa fa-shopping-cart text-white" aria-hidden="true"></i></Link>
      <div className="row w-100 m-auto pt-4 gx-0"> 
@@ -89,7 +89,7 @@ const count = cartStorage.length
    animate={{y:0}}
    transition={{delay:1,duration:3}}
    >
-     <div className="d-inline-block"><a href="#" className="mx-2 text-decoration-none fs-4 text-dark"><span style={{"color":"orangered"}}>W</span>eBBIE</a></div>
+     <div className="d-inline-block"><a href="#" className="mx-2 text-decoration-none fs-4 text-dark"><span style={{"color":"orangered"}}>G</span>aGAND</a></div>
      <div className="d-inline-block text-end" style={{"width":"50%","paddingBottom":"0px"}}><img src="/images/nike-1.png" alt="nike" className="img-fluid" style={{"width":"15%","marginBottom":"7px"}}/></div>
      <div className="d-inline-block float-end mt-2 mx-2"><input class="form-control d-inline" style={{"fontSize":"14px","width":"70%"}} placeholder="Type to search..."/> <button className="btn btn-dark" style={{"fontSize":"15px","backgroundColor":"orangered","border":"none"}}>Search</button></div>
     

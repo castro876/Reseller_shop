@@ -23,7 +23,7 @@ const count = cartStorage.length
    <button className="navbar-toggler">
   <span className="navbar-toggler-icon" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"></span>
 </button>
-<h1 className="text-danger position-absolute d-inline">W<span className="text-white">eBBIE</span></h1>
+<h1 className="text-danger position-absolute d-inline">G<span className="text-white">aGAND</span></h1>
  </div>
  <Link to={'/shoppingcart'} class="btn btn-success" type="button"><i className="fa fa-shopping-cart text-white" aria-hidden="true"></i></Link>
  <div className="row w-100 m-auto pt-4 gx-0"> 

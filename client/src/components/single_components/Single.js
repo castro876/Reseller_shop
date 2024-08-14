@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
 import Nav from "../nav_component/Nav";
 import { motion } from "framer-motion";
+import Toast from "../toast_component/Toast"
 
 const Single = () => {
 
@@ -31,6 +32,9 @@ const Single = () => {
       }
         
       func()
+
+       //scroll at the top of the page
+  window.scrollTo(0, 0);
  },[])
 
    //change qunatity state
@@ -76,6 +80,7 @@ useEffect(() => {
 
 
 const [added, setAdded] = useState(false)
+const [play, setPlay] = useState(false)
 
 const addToCart = () => {
     
@@ -97,7 +102,7 @@ const addToCart = () => {
        const newData = [...dataStorage, obj]; // Create new array with the new object
        setDataStorage(newData); // Update state
        sessionStorage.setItem('store', JSON.stringify(newData)); // Update sessionStorage
-       alert('Added to cart')
+       setPlay(true)
      } catch (error) {
        console.log('Failed to add to sessionStorage: ' + error.message);
      }
@@ -167,27 +172,34 @@ const addToCart = () => {
   <h1 className="fw-bolder" ref={titleRef}>{fun && fun.data.title}</h1>
     <strike className="text-danger">${fun && fun.data.discount}</strike><h4 ref={priceRef}>${fun && fun.data.price}</h4>
     <p>{fun && fun.data.discount_details}</p>
-    <input type="number" value={Quantity} style={{"width":"10%","textAlign":"center"}} onChange={(e) =>  {
+    <input type="number" value={Quantity} style={{"width":"15%","textAlign":"left"}} onChange={(e) =>  {
                      if (e.target.value >= 1) {
                     setQuantity(parseInt(e.target.value))
-                     } else{alert('quantity must be greater than 1')}
+                     } else{}
                   }}/><br /><br />
   <select ref={sizeRef}>
-    <option>Select Size</option>
+    <option>L</option>
     <option>XXL</option>
     <option>XL</option>
-    <option>L</option>
     <option>M</option>
     <option>S</option>
     </select><br /><br />
 <button type="submit" className="btn btn-outline-dark rounded-0" onClick={addToCart}>Add To Cart &rarr;</button><br />
+
  <h3 className="fw-bolder">Product Details <i className="fa fa-indent text-danger"></i></h3> 
  <p>{fun && fun.data.description}</p>
  </div>
-</div>
-
+  </div>
  </div>
 </div>
+
+{/* Toast */} 
+{play && <Toast
+  message="Item added to cart!"
+  show={play}
+  onClose={() => setPlay(false)}
+/>}
+
  </>
      );
 }

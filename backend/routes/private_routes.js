@@ -38,23 +38,21 @@ route.get('/profile',protected, control.userProfile)
 //Get login -- Private
 route.post('/profile', control.userProfilePost)
 
+// Get forgot-password -- Public
+route.get('/forgot_password', control.userForgetPass);
 
-//Get forgot-password -- Public
-route.get('/forgot_password', control.userforgetPass)
+// Post forgot-password -- Public
+route.post('/forgot_password', control.userForgetPost);
+
+// Get reset-password -- Public
+route.get('/reset_password/:token', control.userResetGet);
+
+// Post reset-password -- Public
+route.post('/reset_password/:token', control.userResetPost);
 
 
-//Get forgot-password -- Public
-route.post('/forgot_password', control.userforgetPost)
-
-//Get reset-password -- Public
-route.get('/reset_password/:id/:token', control.userresetGet)
-
-//Post reset-password -- Public
-route.post('/reset_password/:id/:token', control.userresetPost)
-
-//Get forgot-password -- Public
-route.post('/forgot_password', control.userforgetPost)
-
+//Post send-email -- Public
+route.post('/send_email', control.userEmail)
 
 //------------------------------------------------ORDER | ADMIN-------------------------------------------------//
 

@@ -1,7 +1,7 @@
 const Credit = () => {
     return ( 
     <>
-<h2 className="title" style={{"marginTop":"200px", "marginBottom":"20px","textAlign":"center"}}><span className="text-danger">Why Shop </span> With Us</h2>
+<h2 className="title" style={{"marginTop":"170px", "marginBottom":"20px","textAlign":"center"}}><span className="text-danger">Why Shop </span> With Us</h2>
   <div className="container-fluid mb-5">
   <div className="row gx-1 gy-3 text-center fs-5">
     <div className="col-sm">

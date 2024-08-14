@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
+import axios from 'axios';
 import escapeHtml from 'escape-html';
 import Cookies from 'js-cookie';
 import Nav from "../nav_component/Nav";
@@ -13,7 +14,8 @@ useEffect(() => {
   // Load data from sessionStorage on component mount
   const cartData = JSON.parse(sessionStorage.getItem("store") || "[]");
   setCartStorage(cartData);
-
+  //scroll at the top of the page
+  window.scrollTo(0, 0);
 }, []);
 
 
@@ -70,6 +72,8 @@ useEffect(() => {
     const fetchInfo = async (e) => {
       e.preventDefault();
       
+      sessionStorage.setItem('guessemail', JSON.stringify(email))
+
       //sanetize user input
       const sanitizedEmail = escapeHtml(email);
       const sanitizedPassword = escapeHtml(password);
@@ -136,6 +140,10 @@ useEffect(() => {
             });
         }
 
+        
+        //FedEx or TARA delivery
+        const deliveryRef = useRef('');
+        const delivery = deliveryRef.current.value
       
         const onCreateOrder = (data, actions) => {
           return actions.order.create({
@@ -153,10 +161,10 @@ useEffect(() => {
                           }
                       },
                       items: cartStorage.map(item => ({
-                          name: item.title,
+                          name: item.title + " " + item.size,
                           unit_amount: { currency_code: "USD", value: item.price },
                           quantity: item.quantity,
-                          description: item.description,
+                          description: delivery,
                           category: "PHYSICAL_GOODS"
                       }))
                   }
@@ -164,14 +172,46 @@ useEffect(() => {
           });
       };
 
+
       const onApproveOrder = (data,actions) => {
         return actions.order.capture().then((details) => {
             const name = details.payer.name
             setisPlaced(true)
-            
-            
-            setorderDeatials(details.purchase_units[0].payee.merchant_id)
-            console.log(details.purchase_units[0].payee.merchant_id)
+    
+            const guessEmail = JSON.parse(sessionStorage.getItem("guessemail") || "[]")
+            /*setorderDeatials(details.purchase_units[0].payee.merchant_id)*/
+            const message = details.purchase_units[0].items[0].description
+            const detale = details.purchase_units[0].items[0].name
+            const parish = details.purchase_units[0].shipping.address.admin_area_2
+            console.log(detale)
+
+
+            fetch('http://localhost:4001/send_email', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                email: guessEmail,
+                message: message,
+                cost: total.toFixed(2),
+                dete: detale,
+                place: parish
+              }),
+            })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+              }
+              return response.json();
+            })
+            .then(data => {
+              console.log('Email sent successfully:', data);
+            })
+            .catch(error => {
+              console.error('There was an error sending the email:', error);
+            });
+           
         });
     }
 
@@ -234,6 +274,7 @@ useEffect(() => {
     setShowPassword(!showPassword);
   };
 
+
     return ( 
         <>
   <Nav/>
@@ -285,6 +326,15 @@ useEffect(() => {
       <td className="float-end"><input type={"text"} className="form-control" placeholder="Coupon Code..."/></td>
     </tr>
     <tr>
+      <th scope="row">Method</th>
+      <td className="float-end">
+      <select ref={deliveryRef}>
+    <option>Knutsford Express</option>
+    <option>TARA (unavailable)</option>
+    </select><br />
+      </td>
+    </tr>
+    <tr>
       <th scope="row">Total</th>
       <td className="float-end">${total.toFixed(2)}</td>
     </tr>
@@ -301,7 +351,7 @@ useEffect(() => {
                 <div className="w-75 m-auto text-start"><input type="checkbox" id="showPassword" onChange={togglePasswordVisibility} /><label className="text-danger" htmlFor="showPassword">Show Password</label></div><br />
                 <button className="btn btn-dark text-white rounded-pill w-75" onClick={ (e) => {fetchInfo(e)}}>Checkout &#8594;</button><br /><br />
                 <p>{isError}</p>
-                <div className="mb-2"><a href="#">Forget Password?</a><a href="#"> <a href="http://localhost:4001/forgot_password" target="_blank" className="text-info">click</a></a> or <a href="http://localhost:4001/register" target="_blank"><u className="text-info">Register</u></a></div>
+                <div className="mb-2"><a href="#">Forget Password?</a><a href="#"> <a href="http://localhost:4001/forgot_password" target="_blank" rel="noreferrer" className="text-info">click</a></a> or <a href="http://localhost:4001/register" target="_blank" rel="noreferrer" ><u className="text-info">Register</u></a></div>
             </form>  
             </div>  
     </div> :<></> }

@@ -26,6 +26,11 @@ const Scheeema =  new mongoose.Schema({
 
     },
 
+  resetPasswordToken: String,
+  
+  resetPasswordExpiry: Date,
+
+
 }, {timestamps: true})
 
 

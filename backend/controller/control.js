@@ -3,6 +3,7 @@ const Usrmod = require('../Models/db_user_schema')
 const OrderMod = require('../Models/db_order_schema')
 const paypal = require('paypal-rest-sdk')
 const bcrypt = require('bcrypt')
+const crypto = require('crypto');
 const jwt = require('jsonwebtoken')
 const sanitizeHtml = require('sanitize-html') //used to saneitize the user input
 nodemailer = require('nodemailer');
@@ -258,135 +259,165 @@ if(usrExist) {
 }
 
 
-
-
     //Get request user page endpoint => //forgot_password
-  const userforgetPass = (req, res) => {
+  const userForgetPass = (req, res) => {
     res.render('forgot_password')
     }
 
-
-     //Get request user page endpoint => //forgot_password
-  const userforgetPost = async (req, res) => {
-    
-    const usrExist = await Usrmod.findOne({ email: req.body.email });
-
-    const usrEmail = sanitizeHtml(req.body.email)
-    let errorMessage = '';
-    const regex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-    const regexSymbol = /<|>|\s/g;
-    
-    
-    if(usrExist) {
-      
-            const secretKey = process.env.JWT_Secret
-            
-            const options = {
-                expiresIn: '5m' 
-          }
-
-          const payload = {
-            id: usrExist._id,
-            email: usrExist.email
-          }
-
-          // Generate & send JWT token
-          const token = jwt.sign(payload, secretKey, options)
-          const link = `http://localhost:4001/reset_password/${usrExist._id}/${token}`
-
-
-          var transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-              user: 'caribwebcare@gmail.com',
-              pass: 'dwnemjmlmxwojlui'
-            }
-          });
-          
-          var mailOptions = {
-            from: 'caribwebcare@gmail.com',
-            to: usrExist.email,
-            subject: 'Reply: Password-Reset Link',
-            text: `Please click the link to reset your password: ${link}`
-          };
-          
-          transporter.sendMail(mailOptions, function(error, info){
-            if (error) {
-              console.log(error);
-            } else {
-              console.log('Email sent: ' + info.response);
-            }
-          });
-          res.render('forgot_password',{ err: "Reset link sent to your email: expires in 5 minutes" })
-
-   } else{
-     res.render('forgot_password',{ err: "User doesn't exist" })
- }
-
-    }
-
-
-  //Get request user page endpoint => //forgot_password
-   const userresetGet = async (req, res) => {
-  const {id, token} = req.params
-  const usrExist = await Usrmod.findOne({ id: req.body.id });
-  if(usrExist) {
-    const msg = ''
-    const secretKey = process.env.JWT_Secret
-       try {
-          const verify = jwt.verify(token, secretKey)
-          res.render('reset_password',{ err: msg })
-        } catch (error) {
-        res.send('<h1>OPPS! 404 Page Cannot Be Found <a>Link expired</h1>')
-       }
-  }
-    
-   }
-
- 
-  //Get request user page endpoint => //forgot_password
-  const userresetPost = async (req, res) => {
-    const regexPass = /^[a-zA-Z0-9]+$/;
-    const {id, token} = req.params
-    const confirmpassword = sanitizeHtml(req.body.confirmpassword)
-    const password = sanitizeHtml(req.body.password)
-    const usrExist = await Usrmod.findOne({ id: req.body.id });
-
-    if (password !== confirmpassword) {
-      errorMsg = "Password doesn't match";
-         res.render('reset_password',{err: errorMsg})
-  }
   
-  else if (!password.match(regexPass)) {
-    errorMsg = "Password must be at least 8 alphanumeric characters";
-     res.render('reset_password',{ err: errorMsg });
-}
-     
-else if (!confirmpassword || !password) {
-  errorMsg = "Password field cannot be empty";
-   res.render('reset_password',{ err: errorMsg });
-}
+// POST request to handle forgot password form submission
+const userForgetPost = async (req, res) => {
+  try {
+    const sanitizedEmail = sanitizeHtml(req.body.email);
+    const regex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
-    if(usrExist) {
-      const errorMsg = ''
-         try {
-               //create hash password before it's edited
-         const salt = await bcrypt.genSalt() 
-         const hash = await bcrypt.hash(req.body.password, salt)
-
-        const usrData = await Usrmod.findByIdAndUpdate(usrExist._id, {
-            password: hash
-        })
-           const successMsg = "Password updated successfully";
-           res.render('reset_password',{ err: successMsg });
-             
-          } catch (error) {
-          console.log(error)
-         }
+    if (!regex.test(sanitizedEmail)) {
+      return res.render('forgot_password', { err: 'Invalid email format' });
     }
-      
-     }
 
+    const usrExist = await Usrmod.findOne({ email: sanitizedEmail });
+    if (!usrExist) {
+      return res.render('forgot_password', { err: "User doesn't exist" });
+    }
+
+    const resetToken = crypto.randomBytes(20).toString('hex');
+    const resetTokenExpiry = Date.now() + 3600000; // 1 hour expiry
+
+    usrExist.resetPasswordToken = resetToken;
+    usrExist.resetPasswordExpiry = resetTokenExpiry;
+    await usrExist.save();
+
+    const resetLink = `http://localhost:4001/reset_password/${resetToken}`;
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: usrExist.email,
+      subject: 'Password Reset Link',
+      text: `Please click the link to reset your password: ${resetLink}`,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error('Error sending email:', error);
+        return res.render('forgot_password', { err: 'Error sending email. Please try again later.' });
+      } else {
+        console.log('Email sent:', info.response);
+        return res.render('forgot_password', { err: 'Reset link sent to your email: expires in 1 hour' });
+      }
+    });
+  } catch (error) {
+    console.error('Error in userForgetPost:', error);
+    return res.render('forgot_password', { err: 'An error occurred. Please try again later.' });
+  }
+};
+
+const userResetGet = async (req, res) => {
+  const { token } = req.params;
+  try {
+    const usrExist = await Usrmod.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpiry: { $gt: Date.now() },
+    });
+
+    if (!usrExist) {
+      console.log('Token validation failed:', { token, now: Date.now() });
+      return res.send('<h1>OPPS! 404 Page Cannot Be Found <a>Link expired</a></h1>');
+    }
+
+    return res.render('reset_password', { token });
+  } catch (error) {
+    console.error('Error in userResetGet:', error);
+    return res.send('<h1>OPPS! 404 Page Cannot Be Found <a>Link expired</a></h1>');
+  }
+};
+
+
+const userResetPost = async (req, res) => {
+  const { token } = req.params;
+  const password = sanitizeHtml(req.body.password);
+  const confirmpassword = sanitizeHtml(req.body.confirmpassword);
+  const regexPass = /^[a-zA-Z0-9]{8,}$/;
+
+  if (!password || !confirmpassword) {
+    return res.render('reset_password', { token, err: 'Password field cannot be empty' });
+  }
+
+  if (password !== confirmpassword) {
+    return res.render('reset_password', { token, err: "Passwords don't match" });
+  }
+
+  if (!regexPass.test(password)) {
+    return res.render('reset_password', { token, err: 'Password must be at least 8 alphanumeric characters' });
+  }
+
+  try {
+    const usrExist = await Usrmod.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpiry: { $gt: Date.now() },
+    });
+
+    if (!usrExist) {
+      console.log('Token validation failed:', { token, now: Date.now() });
+      return res.render('reset_password', { token, err: 'Link expired or invalid' });
+    }
+
+    const salt = await bcrypt.genSalt();
+    const hash = await bcrypt.hash(password, salt);
+
+    usrExist.password = hash;
+    usrExist.resetPasswordToken = undefined;
+    usrExist.resetPasswordExpiry = undefined;
+    await usrExist.save();
+
+    return res.render('reset_password', { token, err: 'Password updated successfully' });
+  } catch (error) {
+    console.error('Error in userResetPost:', error);
+    return res.render('reset_password', { token, err: 'An error occurred. Please try again later.' });
+  }
+};
+
+    
+
+   //Post request endpoint => /Email
+   const userEmail = async (req, res) => {
+    const { email, message, dete, cost, place } = req.body;
+    console.log(email)
+  // Create a transporter
+  const transporter = nodemailer.createTransport({
+    service: 'gmail', // Use your email service
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  // Set email options
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: 'Order Placed',
+    html: `Order Details<br><br>
+          Your order for ${dete}... at ${cost} was sucessfully placed and will arrive within 2-3 days at your ${place} ${message} location. Please contact our despatcher at <span style="color:blue;">1 (876) 808-9990<span/> to keep track of your order.`,
+  };
+
+  // Send email
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      return res.status(500).send(error.toString());
+    }
+    res.status(200).json({ret: 'Email sent:'});
+  });
+
+      
+ }   
 
     /* --------------------------------------Addmin | Order------------------------------------- */ 
 
@@ -403,4 +434,4 @@ else if (!confirmpassword || !password) {
     }
 
 
-module.exports = {createUserPage, createUser, allProduct, singleUser, checoutkUser, logUser, regUser, regPostUser, logPostUser, userProfile, userProfilePost, userforgetPass, userforgetPost, userresetGet, userresetPost, orderGet, orderPost}      
+module.exports = {createUserPage, createUser, allProduct, singleUser, checoutkUser, logUser, regUser, regPostUser, logPostUser, userProfile, userProfilePost, userForgetPass, userForgetPost, userResetGet, userResetPost, orderGet, orderPost, userEmail}      

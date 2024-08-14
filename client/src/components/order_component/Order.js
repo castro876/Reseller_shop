@@ -22,7 +22,7 @@ const Order = () => {
     
       const [isProcess, setisProcess] = useState()
       setTimeout(() => {
-        setisProcess('Order Placed')
+        setisProcess('Check Your Email')
       }, 9000);
     
 
