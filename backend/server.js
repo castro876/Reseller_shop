@@ -18,7 +18,7 @@ app.use(express.urlencoded({extended: true}))
 app.use(express.static(__dirname + '/public/')); // This connects the path to the file
 app.set('view engine', 'ejs');
 app.use(cors({
-  origin: 'http://localhost:3000', // Allow requests from this origin
+  origin: 'https://reseller-shop-client.onrender.com/', // Allow requests from this origin
   credentials: true // Allow credentials (cookies) to be sent
 })); // Enable CORS for all route
 app.use(cookieParser());
