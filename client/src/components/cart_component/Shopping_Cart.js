@@ -64,7 +64,7 @@ useEffect(() => {
   const [password, setPassword] = useState(null) 
   const [showPassword, setShowPassword] = useState(false);
 
-  const [isVerified, setisVerified] = useState(false)
+  const [isVerified, setisVerified] = useState(true)
   const [isError, setisError] = useState('')
   const [isPlaced, setisPlaced] = useState(false)
 
