@@ -7,7 +7,7 @@ const Featured = () => {
 
     useEffect(() => {
          const func = async () => {
-                const response = await fetch('http://localhost:4001/all_product')
+                const response = await fetch('https://reseller-shop-backend.onrender.com/all_product')
                 const data = await response.json()
                 setproData(data)
          }

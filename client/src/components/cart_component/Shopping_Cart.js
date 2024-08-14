@@ -95,7 +95,7 @@ useEffect(() => {
               password: sanitizedPassword
           };
   
-          const endpoint = `http://localhost:4001/checkout`;
+          const endpoint = `https://reseller-shop-backend.onrender.com/checkout`;
   
           const options = {
               method: 'POST',
@@ -186,7 +186,7 @@ useEffect(() => {
             console.log(detale)
 
 
-            fetch('http://localhost:4001/send_email', {
+            fetch('https://reseller-shop-backend.onrender.com/send_email', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -221,7 +221,7 @@ useEffect(() => {
      useEffect( () => {
 
        const orderD = async () => {
-        const endpoint = `http://localhost:4001/profile`;
+        const endpoint = `https://reseller-shop-backend.onrender.com/profile`;
   
         const options = {
             method: 'POST',
@@ -351,7 +351,7 @@ useEffect(() => {
                 <div className="w-75 m-auto text-start"><input type="checkbox" id="showPassword" onChange={togglePasswordVisibility} /><label className="text-danger" htmlFor="showPassword">Show Password</label></div><br />
                 <button className="btn btn-dark text-white rounded-pill w-75" onClick={ (e) => {fetchInfo(e)}}>Checkout &#8594;</button><br /><br />
                 <p>{isError}</p>
-                <div className="mb-2"><a href="#">Forget Password?</a><a href="#"> <a href="http://localhost:4001/forgot_password" target="_blank" rel="noreferrer" className="text-info">click</a></a> or <a href="http://localhost:4001/register" target="_blank" rel="noreferrer" ><u className="text-info">Register</u></a></div>
+                <div className="mb-2"><a href="#">Forget Password?</a><a href="#"> <a href="https://reseller-shop-backend.onrender.com/forgot_password" target="_blank" rel="noreferrer" className="text-info">click</a></a> or <a href="https://reseller-shop-backend.onrender.com/register" target="_blank" rel="noreferrer" ><u className="text-info">Register</u></a></div>
             </form>  
             </div>  
     </div> :<></> }

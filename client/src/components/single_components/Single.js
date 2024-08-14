@@ -9,7 +9,7 @@ const Single = () => {
   let  id  = useParams()
 
     const [fun, setfun] = useState(null)
-    const endpoint = `http://localhost:4001/single_product/${id}`;
+    const endpoint = `https://reseller-shop-backend.onrender.com/single_product/${id}`;
 
     const options = {
       method: 'POST',
