@@ -6,6 +6,8 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const privateRoutes = require('./routes/private_routes')
 const path = require('path');
+const http = require('http');
+
 
 const app = express();
 
@@ -23,12 +25,29 @@ app.use(cors({
 })); // Enable CORS for all route
 app.use(cookieParser());
 
-mongoose.connect(process.env._API_key)
+// Connect to MongoDB with Mongoose
+mongoose.connect(process.env._API_key, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
-    app.listen(process.env.PORT, '0.0.0.0', () => console.log(`Listening on PORT ${process.env.PORT}`));
-    console.log('Connected to database successfully');
+    console.log('Connected to MongoDB successfully');
+
+    // Create the HTTP server
+    const server = http.createServer(app);
+
+    // Increase keep-alive timeout to 120 seconds
+    server.keepAliveTimeout = 120000; // 120 seconds
+
+    // Increase headers timeout to 120 seconds
+    server.headersTimeout = 120000; // 120 seconds
+
+    // Start the server
+    const port = process.env.PORT || 4001;
+    server.listen(port, '0.0.0.0', () => {
+      console.log(`Server is running on port ${port}`);
+    });
   })
-  .catch(err => console.log(err));
+  .catch(err => {
+    console.error('Failed to connect to MongoDB:', err);
+  });
 
 
 // Routes
