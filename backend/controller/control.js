@@ -79,7 +79,7 @@ const checoutkUser = async (req, res) => {
               res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
               res.setHeader('Access-Control-Allow-Credentials', 'true');
               res.setHeader('Access-Control-Allow-Origin', 'https://reseller-shop-client.onrender.com');
-              res.cookie('shopCookie', token, { maxAge: 3600000, httpOnly: false });
+            
               res.json({ result: true });
                  }
 
