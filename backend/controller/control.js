@@ -6,7 +6,9 @@ const bcrypt = require('bcrypt')
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken')
 const sanitizeHtml = require('sanitize-html') //used to saneitize the user input
-nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer');
+
+
 
 //Get request user page endpoint => /add_user
 const createUserPage = (req, res) => {
@@ -92,6 +94,13 @@ const checoutkUser = async (req, res) => {
      }
 
       }
+
+
+        //Get request user page endpoint => /add_user
+  const userOpt = (req, res) => {
+    res.sendStatus(204); // No Content
+}
+
     
    //Get request user page endpoint => /add_user
   const logUser = (req, res) => {
@@ -438,4 +447,4 @@ const userResetPost = async (req, res) => {
     }
 
 
-module.exports = {createUserPage, createUser, allProduct, singleUser, checoutkUser, logUser, regUser, regPostUser, logPostUser, userProfile, userProfilePost, userForgetPass, userForgetPost, userResetGet, userResetPost, orderGet, orderPost, userEmail}      
+module.exports = {userOpt, createUserPage, createUser, allProduct, singleUser, checoutkUser, logUser, regUser, regPostUser, logPostUser, userProfile, userProfilePost, userForgetPass, userForgetPost, userResetGet, userResetPost, orderGet, orderPost, userEmail}      

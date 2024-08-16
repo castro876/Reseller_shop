@@ -22,7 +22,7 @@ app.set('view engine', 'ejs');
 app.use(cors({
   origin: 'https://reseller-shop-client.onrender.com', // Allow requests from this origin
   methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true // Allow credentials (cookies) to be sent
 })); // Enable CORS for all route
 app.use(cookieParser());
