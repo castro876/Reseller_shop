@@ -5,9 +5,6 @@ const protected = require('../routes/auth_midware')
 const cors = require('cors');
 
 
-// Handle OPTIONS requests
-route.options('/checkout',cors(), control.userOpt)
-
 //Post add user -- Private
 route.post('/add_user', control.createUser)
 
