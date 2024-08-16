@@ -95,7 +95,7 @@ useEffect(() => {
               password: sanitizedPassword
           };
   
-          const endpoint = `https://reseller-shop-backend.onrender.com/checkout`;
+          const endpoint = 'https://reseller-shop-backend.onrender.com/checkout';
   
           const options = {
               method: 'POST',
@@ -258,7 +258,15 @@ useEffect(() => {
 
   {/*Verify user login */}
 
- 
+  useEffect(() => {
+    // Get cookie value
+    const myCookie = Cookies.get('shopCookie');
+    //console.log('Cookie value:', myCookie);
+    if (myCookie) {
+        setisVerified(true)
+    }
+
+  }, []);   
 
    
   // Function to toggle password visibility
