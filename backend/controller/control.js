@@ -75,6 +75,10 @@ const checoutkUser = async (req, res) => {
               // Generate & send JWT token
               const token = jwt.sign(payload, secretKey, options)
               
+              res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
+              res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+              res.setHeader('Access-Control-Allow-Credentials', 'true');
+              res.setHeader('Access-Control-Allow-Origin', 'https://reseller-shop-client.onrender.com');
               res.cookie('shopCookie', token, { maxAge: 3600000, httpOnly: false });
               res.json({ result: true });
                  }
