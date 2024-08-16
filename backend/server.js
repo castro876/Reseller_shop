@@ -14,22 +14,6 @@ const app = express();
 // Middleware
 // Set the path for static files
 app.use(express.static(path.join(__dirname, 'public')));
-const _dirname = path.dirname("")
-const buildpath = path.join(_dirname, "../client/build")
-app.use(express.static(buildpath))
-
-app.get("/*", function (req, res) {
-  res.sendFile(
-  path.join(_dirname, "../client/build/index.html"),
-  function (err) {
-    if (err) {
-      res.status(500).send(err)
-    }
-  }
-  )
-})
-
-
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
