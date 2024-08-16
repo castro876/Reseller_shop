@@ -106,7 +106,9 @@ useEffect(() => {
               credentials: 'include' // Include cookies in the request
           };
   
-          try {
+            
+          useEffect(() => {
+            const func = async () => {
               const response = await fetch(endpoint, options);
               if (!response.ok) {
                   throw new Error('Network response was not ok');
@@ -116,14 +118,12 @@ useEffect(() => {
               // Handle successful response
               setisVerified(data.result)
               setisError(data.err)
-
-          } catch (error) {
-              console.error('Error:', error);
-              // Handle error
-          }
-      }
+            }
+              func()
+    },[])
+      
   };
-
+    }
 
         {/** PayPal SDK Here --> */}
         const [{ options, isPending }, dispatch] = usePayPalScriptReducer();
