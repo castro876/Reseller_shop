@@ -15,6 +15,10 @@ const app = express();
 // Set the path for static files
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, '../client/build')));
+
+
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(express.static(__dirname + '/public/')); // This connects the path to the file
@@ -26,6 +30,12 @@ app.use(cors({
   credentials: true // Allow credentials (cookies) to be sent
 })); // Enable CORS for all route
 app.use(cookieParser());
+
+
+// The "catchall" handler: for any request that doesn't match one above, send back React's index.html file.
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/build/index.html'));
+});
 
 // Connect to MongoDB with Mongoose
 mongoose.connect(process.env._API_key, { useNewUrlParser: true, useUnifiedTopology: true })
