@@ -6,15 +6,16 @@
   "dependencies": {
     "nodemailer": "^6.9.13"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --watch backend --exec node backend/server.js",
+    "start": "nodemon backend/server.js",
     "server": "nodemon backend/server.js",
     "client": "npm start --prefix client",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --force --prefix client && npm run build --prefix client"
   },
-  
   "keywords": [],
   "author": "",
   "license": "ISC"
