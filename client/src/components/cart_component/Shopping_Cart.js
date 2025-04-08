@@ -69,7 +69,7 @@ useEffect(() => {
   const [isPlaced, setisPlaced] = useState(false)
 
 
-    const fetchInfo = async (e) => {
+    const fetchInfo = (e) => {
       e.preventDefault();
       
       sessionStorage.setItem('guessemail', JSON.stringify(email))
@@ -95,7 +95,7 @@ useEffect(() => {
               password: sanitizedPassword
           };
   
-          const endpoint = 'https://reseller-shop-backend.onrender.com/checkout';
+          const endpoint = 'http://localhost:4001/checkout';
   
           const options = {
               method: 'POST',
@@ -107,20 +107,22 @@ useEffect(() => {
           };
   
             
-          useEffect(() => {
-            const func = async () => {
-              const response = await fetch(endpoint, options);
-              if (!response.ok) {
-                  throw new Error('Network response was not ok');
-              }
-              const data = await response.json();
-                console.log(data.result);
-              // Handle successful response
-              setisVerified(data.result)
-              setisError(data.err)
-            }
-              func()
-    },[])
+          fetch(endpoint, options)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log(data.result);
+          setisVerified(data.result);
+          setisError(data.err);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          setisError('Failed to fetch data');
+        });
       
   };
     }
@@ -183,10 +185,10 @@ useEffect(() => {
             const message = details.purchase_units[0].items[0].description
             const detale = details.purchase_units[0].items[0].name
             const parish = details.purchase_units[0].shipping.address.admin_area_2
-            console.log(detale)
+            console.log(guessEmail)
 
 
-            fetch('https://reseller-shop-backend.onrender.com/send_email', {
+            fetch('http://localhost:4001/send_email', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -221,7 +223,7 @@ useEffect(() => {
      useEffect( () => {
 
        const orderD = async () => {
-        const endpoint = `https://reseller-shop-backend.onrender.com/profile`;
+        const endpoint = `http://localhost:4001/profile`;
   
         const options = {
             method: 'POST',
@@ -351,7 +353,7 @@ useEffect(() => {
                 <div className="w-75 m-auto text-start"><input type="checkbox" id="showPassword" onChange={togglePasswordVisibility} /><label className="text-danger" htmlFor="showPassword">Show Password</label></div><br />
                 <button className="btn btn-dark text-white rounded-pill w-75" onClick={ (e) => {fetchInfo(e)}}>Checkout &#8594;</button><br /><br />
                 <p>{isError}</p>
-                <div className="mb-2"><a href="#">Forget Password?</a><a href="#"> <a href="https://reseller-shop-backend.onrender.com/forgot_password" target="_blank" rel="noreferrer" className="text-info">click</a></a> or <a href="https://reseller-shop-backend.onrender.com/register" target="_blank" rel="noreferrer" ><u className="text-info">Register</u></a></div>
+                <div className="mb-2"><a href="#">Forget Password?</a><a href="#"> <a href="http://localhost:4001/forgot_password" target="_blank" rel="noreferrer" className="text-info">click</a></a> or <a href="http://localhost:4001/register" target="_blank" rel="noreferrer" ><u className="text-info">Register</u></a></div>
             </form>  
             </div>  
     </div> :<></> }

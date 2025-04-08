@@ -10,7 +10,7 @@ import Truck from './page/Truck';
 function App() {
 
   const initialOptions = {
-    "client-id": "AeHrIGOJl5eyQzvwwENwdfQyplb_cJcB4szyEM7-7L_J16OzPX82A7JPahrStRTmrPWcphC9oCoIKj72",
+    "client-id": "ASY_O36EBi_HV4efhXn-Gej6hrKsF4VhL_418m5gEuIiF-snIu3Jol0qgYR74VwZTOnZgSTF8Gv6W4Up",
     currency: "USD",
     intent: "capture",
   };

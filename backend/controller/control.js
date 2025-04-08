@@ -80,7 +80,7 @@ const checoutkUser = async (req, res) => {
               res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
               res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
               res.setHeader('Access-Control-Allow-Credentials', 'true');
-              res.setHeader('Access-Control-Allow-Origin', 'https://reseller-shop-client.onrender.com');
+              res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
               res.cookie('shopCookie', token, { maxAge: 3600000, httpOnly: false });
               res.json({ result: true });
                  }
@@ -294,7 +294,7 @@ const userForgetPost = async (req, res) => {
     usrExist.resetPasswordExpiry = resetTokenExpiry;
     await usrExist.save();
 
-    const resetLink = `https://reseller-shop-backend.onrender.com/reset_password/${resetToken}`;
+    const resetLink = `http://localhost:4001/reset_password/${resetToken}`;
 
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -396,7 +396,7 @@ const userResetPost = async (req, res) => {
    //Post request endpoint => /Email
    const userEmail = async (req, res) => {
     const { email, message, dete, cost, place } = req.body;
-    console.log(email)
+    console.log(`This is you email: ${email}`)
   // Create a transporter
   const transporter = nodemailer.createTransport({
     service: 'gmail', // Use your email service
